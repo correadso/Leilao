@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 public class LeilaoTest {
 
     @Test
-    public void getDescricao_QuandoRecebeDescricao_DevolveDescricao() {
+    public void deve_DevolveDescricao_QuandoRecebeDescricao() {
         // criar cenário de teste
         Leilao console = new Leilao("Console");
 
@@ -27,7 +27,7 @@ public class LeilaoTest {
     // deve_DevolveMaiorLance_QuandoRecebeApenasUmLance
 
     @Test
-    public void getMaiorLance_QuandoRecebeApenasUmLance_DevolveMaiorLance() {
+    public void deve_DevolveMaiorLance_QuandoRecebeApenasUmLance() {
         Leilao console = new Leilao("Console");
         console.propoe(new Lance(new Usuario("Alex"), 200.0));
 
@@ -36,7 +36,7 @@ public class LeilaoTest {
     }
 
     @Test
-    public void getMaiorLance_QuandoRecebeMaisDeUmLanceEmOrdemCrescente_DevolveMaiorLance() {
+    public void deve_DevolveMaiorLance_QuandoRecebeMaisDeUmLanceEmOrdemCrescente() {
         Leilao computador = new Leilao("Computador");
         computador.propoe(new Lance(new Usuario("Alex"), 100.0));
         computador.propoe(new Lance(new Usuario("Fran"), 200.0));
@@ -46,7 +46,7 @@ public class LeilaoTest {
     }
 
     @Test
-    public void getMaiorLance_QuandoRecebeMaisDeUmLanceEmOrdemDecrescente_DevolveMaiorLance() {
+    public void deve_DevolveMaiorLance_QuandoRecebeMaisDeUmLanceEmOrdemDecrescente() {
         Leilao carro = new Leilao("Computador");
         carro.propoe(new Lance(new Usuario("Alex"), 10000.0));
         carro.propoe(new Lance(new Usuario("Fran"), 9000.0));
