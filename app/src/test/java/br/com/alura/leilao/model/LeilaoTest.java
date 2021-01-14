@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 public class LeilaoTest {
 
     @Test
-    public void getDescricao() {
+    public void getDescricao_QuandoRecebeDescricao_DevolveDescricao() {
         // criar cenário de teste
         Leilao console = new Leilao("Console");
 
@@ -18,13 +18,40 @@ public class LeilaoTest {
         assertEquals("Console", descricaoDevolvida);
     }
 
+    // padronização dos nomes
+    // 1:
+    // [nome do método] [estado de teste] [resultado esperado]
+    // getMaiorLance_QuandoRecebeApenasUmLance_DevolveMaiorLance()
+    // 2:
+    // [deve] [resultado esperado] [estado de teste]
+    // deve_DevolveMaiorLance_QuandoRecebeApenasUmLance
 
     @Test
-    public void getMaiorLance() {
+    public void getMaiorLance_QuandoRecebeApenasUmLance_DevolveMaiorLance() {
         Leilao console = new Leilao("Console");
         console.propoe(new Lance(new Usuario("Alex"), 200.0));
 
-        double maiorLanceDevolvido = console.getMaiorLance();
-        assertEquals(200.0, maiorLanceDevolvido, 0.0001);
+        double maiorLanceDevolvidoDoConsole = console.getMaiorLance();
+        assertEquals(200.0, maiorLanceDevolvidoDoConsole, 0.0001);
+    }
+
+    @Test
+    public void getMaiorLance_QuandoRecebeMaisDeUmLanceEmOrdemCrescente_DevolveMaiorLance() {
+        Leilao computador = new Leilao("Computador");
+        computador.propoe(new Lance(new Usuario("Alex"), 100.0));
+        computador.propoe(new Lance(new Usuario("Fran"), 200.0));
+
+        double maiorLanceDevolvidoDoComputador = computador.getMaiorLance();
+        assertEquals(200.0, maiorLanceDevolvidoDoComputador, 0.0001);
+    }
+
+    @Test
+    public void getMaiorLance_QuandoRecebeMaisDeUmLanceEmOrdemDecrescente_DevolveMaiorLance() {
+        Leilao carro = new Leilao("Computador");
+        carro.propoe(new Lance(new Usuario("Alex"), 10000.0));
+        carro.propoe(new Lance(new Usuario("Fran"), 9000.0));
+
+        double maiorLanceDevolvidoDoCarro = carro.getMaiorLance();
+        assertEquals(10000.0, maiorLanceDevolvidoDoCarro, 0.0001);
     }
 }
