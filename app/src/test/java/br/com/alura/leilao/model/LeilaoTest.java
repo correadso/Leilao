@@ -99,3 +99,34 @@ public class LeilaoTest {
         assertEquals(300.0, tresMaioresLancesDevolvidos.get(1).getValor(), DELTA);
         assertEquals(200.0, tresMaioresLancesDevolvidos.get(2).getValor(), DELTA);
     }
+
+
+    @Test
+    public void deve_DevolverTresMaioresLances_QuandoNaoRecebeLances() {
+        List<Lance> tresMaioresLancesDevolvidos = CONSOLE.tresMaioresLances();
+
+        assertEquals(0, tresMaioresLancesDevolvidos.size());
+    }
+
+    @Test
+    public void deve_DevolverTresMaioresLances_QuandoRecebeApenasUmLance() {
+        CONSOLE.propoe(new Lance(ALEX, 200.0));
+        List<Lance> tresMaioresLancesDevolvidos = CONSOLE.tresMaioresLances();
+
+        assertEquals(1, tresMaioresLancesDevolvidos.size());
+        assertEquals(200.0, tresMaioresLancesDevolvidos.get(0).getValor(), DELTA);
+    }
+
+    @Test
+    public void deve_DevolverTresMaioresLances_QuandoRecebeApenasDoisLances() {
+        CONSOLE.propoe(new Lance(ALEX, 300.0));
+        CONSOLE.propoe(new Lance(new Usuario("Fran"), 400.0));
+
+        List<Lance> tresMaioresLancesDevolvidos = CONSOLE.tresMaioresLances();
+
+        assertEquals(2, tresMaioresLancesDevolvidos.size());
+        assertEquals(400.0, tresMaioresLancesDevolvidos.get(0).getValor(), DELTA);
+        assertEquals(300.0, tresMaioresLancesDevolvidos.get(1).getValor(), DELTA);
+    }
+
+}
