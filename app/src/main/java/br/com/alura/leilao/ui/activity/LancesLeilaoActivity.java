@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import br.com.alura.leilao.R;
+import br.com.alura.leilao.model.Lance;
 import br.com.alura.leilao.model.Leilao;
 
 public class LancesLeilaoActivity extends AppCompatActivity {
@@ -23,6 +24,13 @@ public class LancesLeilaoActivity extends AppCompatActivity {
             maiorLance.setText(String.valueOf(leilao.getMaiorLance()));
             TextView menorLance = findViewById(R.id.lances_leilao_menor_lance);
             menorLance.setText(String.valueOf(leilao.getMenorLance()));
+            TextView maioresLances = findViewById(R.id.lances_leilao_maiores_lances);
+            StringBuilder sb = new StringBuilder();
+            for (Lance lance: leilao.tresMaioresLances()) {
+                sb.append(lance.getValor() + "\n");
+            }
+            String maioresLancesEmTexto = sb.toString();
+            maioresLances.setText(maioresLancesEmTexto);
         }
     }
 }
