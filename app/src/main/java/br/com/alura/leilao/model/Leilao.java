@@ -22,6 +22,12 @@ public class Leilao implements Serializable {
         double valorLance = lance.getValor();
         if(maiorLance > valorLance) // nao adiciona valores menores
             return;
+        if(!lances.isEmpty()) {
+            Usuario usuarioNovo = lance.getUsuario();
+            Usuario ultimoUsuario = lances.get(0).getUsuario();
+            if(usuarioNovo.equals(ultimoUsuario))
+                return;
+        }
         lances.add(lance);
         if (lances.size() == 1) {
             maiorLance = valorLance;
