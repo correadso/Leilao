@@ -153,7 +153,7 @@ public class LeilaoTest {
     }
 
     @Test
-    public void naoDeve_AdicionarLance_QuandoForMenorQueOMaiorLance() {
+    public void deveLancarException_QuandoForMenorQueOMaiorLance() {
         CONSOLE.propoe(new Lance(ALEX, 500.0));
         try {
             CONSOLE.propoe(new Lance(new Usuario("Fran"), 400.0));
@@ -164,7 +164,7 @@ public class LeilaoTest {
     }
 
     @Test
-    public void naoDeveAdicionarLance_QuandoForOMesmoUsuarioDoUltimoLance() {
+    public void deveLancarException_QuandoForOMesmoUsuarioDoUltimoLance() {
         CONSOLE.propoe(new Lance(ALEX, 500.0));
         try {
             CONSOLE.propoe(new Lance(new Usuario("Alex"), 600.0)); // se colocar 400 não passa no teste por causa dos exceptions
@@ -175,7 +175,7 @@ public class LeilaoTest {
     }
 
     @Test
-    public void naoDeveAdicionarLance_QuandoUsuarioDerCincoLances() {
+    public void deveLancarException_QuandoUsuarioDerCincoLances() {
 
         final Usuario FRAN = new Usuario("Fran");
 
