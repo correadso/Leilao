@@ -155,21 +155,23 @@ public class LeilaoTest {
     @Test
     public void naoDeve_AdicionarLance_QuandoForMenorQueOMaiorLance() {
         CONSOLE.propoe(new Lance(ALEX, 500.0));
-        CONSOLE.propoe(new Lance(new Usuario("Fran"), 400.0));
-
-        int quantidadeLancesDevolvida = CONSOLE.quantidadeDeLances();
-
-        assertEquals(1, quantidadeLancesDevolvida);
+        try {
+            CONSOLE.propoe(new Lance(new Usuario("Fran"), 400.0));
+            fail("Era esperada uma RuntimeException");
+        } catch (RuntimeException exception) {
+            assertEquals("Lance foi menor que maior lance", exception.getMessage());
+        }
     }
 
     @Test
     public void naoDeveAdicionarLance_QuandoForOMesmoUsuarioDoUltimoLance() {
         CONSOLE.propoe(new Lance(ALEX, 500.0));
-        CONSOLE.propoe(new Lance(new Usuario("Alex"), 600.0));
-
-        int quantidadeDeLancesDevolvidos = CONSOLE.quantidadeDeLances();
-
-        assertEquals(1, quantidadeDeLancesDevolvidos);
+        try {
+            CONSOLE.propoe(new Lance(new Usuario("Alex"), 600.0)); // se colocar 400 não passa no teste por causa dos exceptions
+            fail("Era esperada uma RuntimeException");
+        } catch (RuntimeException exception) {
+            assertEquals("Mesmo usuário do último lance", exception.getMessage());
+        }
     }
 
     @Test
@@ -187,14 +189,14 @@ public class LeilaoTest {
                 .lance(ALEX, 700.0)
                 .lance(FRAN, 800.0)
                 .lance(ALEX, 900.0)
-                .lance(FRAN, 1000.0)
-                .lance(ALEX, 1100.0)
-                .lance(FRAN, 1200.0)
-                .build();
+                .lance(FRAN, 1000.0).build();
 
-        int quantidadeDeLancesDevolvidos = CONSOLE.quantidadeDeLances();
-
-        assertEquals(10, quantidadeDeLancesDevolvidos);
+        try {
+            CONSOLE.propoe(new Lance(ALEX, 1100.0));
+            fail("Era esperada uma exception");
+        } catch (RuntimeException exception) {
+            assertEquals("Usuário já deu cinco lances", exception.getMessage());
+        }
     }
 
 }
