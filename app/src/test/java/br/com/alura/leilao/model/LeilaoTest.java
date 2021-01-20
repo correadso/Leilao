@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.util.List;
 
+import br.com.alura.leilao.builder.LeilaoBuilder;
+
 import static org.junit.Assert.*;
 
 public class LeilaoTest {
@@ -172,19 +174,23 @@ public class LeilaoTest {
 
     @Test
     public void naoDeveAdicionarLance_QuandoUsuarioDerCincoLances() {
+
         final Usuario FRAN = new Usuario("Fran");
-        CONSOLE.propoe(new Lance(ALEX, 100.0));
-        CONSOLE.propoe(new Lance(FRAN, 200.0));
-        CONSOLE.propoe(new Lance(ALEX, 300.0));
-        CONSOLE.propoe(new Lance(FRAN, 400.0));
-        CONSOLE.propoe(new Lance(ALEX, 500.0));
-        CONSOLE.propoe(new Lance(FRAN, 600.0));
-        CONSOLE.propoe(new Lance(ALEX, 700.0));
-        CONSOLE.propoe(new Lance(FRAN, 800.0));
-        CONSOLE.propoe(new Lance(ALEX, 900.0));
-        CONSOLE.propoe(new Lance(FRAN, 1000.0));
-        CONSOLE.propoe(new Lance(ALEX, 1100.0));
-        CONSOLE.propoe(new Lance(FRAN, 1200.0));
+
+        final Leilao CONSOLE = new LeilaoBuilder("Console")
+                .lance(ALEX,100.0)
+                .lance(FRAN,200.0)
+                .lance(ALEX,300.0)
+                .lance(FRAN,400.0)
+                .lance(ALEX, 500.0)
+                .lance(FRAN, 600.0)
+                .lance(ALEX, 700.0)
+                .lance(FRAN, 800.0)
+                .lance(ALEX, 900.0)
+                .lance(FRAN, 1000.0)
+                .lance(ALEX, 1100.0)
+                .lance(FRAN, 1200.0)
+                .build();
 
         int quantidadeDeLancesDevolvidos = CONSOLE.quantidadeDeLances();
 
