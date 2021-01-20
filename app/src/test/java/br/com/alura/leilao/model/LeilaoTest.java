@@ -1,10 +1,15 @@
 package br.com.alura.leilao.model;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.List;
 
 import br.com.alura.leilao.builder.LeilaoBuilder;
+import br.com.alura.leilao.exception.LanceMenorQueUltimoLanceException;
+import br.com.alura.leilao.exception.LanceSeguidoDoMesmoUsuarioException;
+import br.com.alura.leilao.exception.UsuarioJaDeuCincoLancesException;
 
 import static org.junit.Assert.*;
 
@@ -152,33 +157,21 @@ public class LeilaoTest {
         assertEquals(0.0, menorLanceDevolvido, DELTA);
     }
 
-    @Test
+    @Test (expected = LanceMenorQueUltimoLanceException.class)
     public void deveLancarException_QuandoForMenorQueOMaiorLance() {
         CONSOLE.propoe(new Lance(ALEX, 500.0));
-        try {
-            CONSOLE.propoe(new Lance(new Usuario("Fran"), 400.0));
-            fail("Era esperada uma RuntimeException");
-        } catch (RuntimeException exception) {
-            assertEquals("Lance foi menor que maior lance", exception.getMessage());
-        }
+        CONSOLE.propoe(new Lance(new Usuario("Fran"), 400.0));
     }
 
-    @Test
+    @Test (expected = LanceSeguidoDoMesmoUsuarioException.class)
     public void deveLancarException_QuandoForOMesmoUsuarioDoUltimoLance() {
         CONSOLE.propoe(new Lance(ALEX, 500.0));
-        try {
-            CONSOLE.propoe(new Lance(new Usuario("Alex"), 600.0)); // se colocar 400 não passa no teste por causa dos exceptions
-            fail("Era esperada uma RuntimeException");
-        } catch (RuntimeException exception) {
-            assertEquals("Mesmo usuário do último lance", exception.getMessage());
-        }
+        CONSOLE.propoe(new Lance(new Usuario("Alex"), 600.0)); // se colocar 400 não passa no teste por causa dos exceptions
     }
 
-    @Test
+    @Test (expected = UsuarioJaDeuCincoLancesException.class)
     public void deveLancarException_QuandoUsuarioDerCincoLances() {
-
         final Usuario FRAN = new Usuario("Fran");
-
         final Leilao CONSOLE = new LeilaoBuilder("Console")
                 .lance(ALEX,100.0)
                 .lance(FRAN,200.0)
@@ -189,14 +182,9 @@ public class LeilaoTest {
                 .lance(ALEX, 700.0)
                 .lance(FRAN, 800.0)
                 .lance(ALEX, 900.0)
-                .lance(FRAN, 1000.0).build();
-
-        try {
-            CONSOLE.propoe(new Lance(ALEX, 1100.0));
-            fail("Era esperada uma exception");
-        } catch (RuntimeException exception) {
-            assertEquals("Usuário já deu cinco lances", exception.getMessage());
-        }
+                .lance(FRAN, 1000.0)
+                .lance(ALEX, 1100.0)
+                .build();
     }
 
 }
