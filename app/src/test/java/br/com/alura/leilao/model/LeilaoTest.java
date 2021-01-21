@@ -11,6 +11,12 @@ import br.com.alura.leilao.exception.LanceMenorQueUltimoLanceException;
 import br.com.alura.leilao.exception.LanceSeguidoDoMesmoUsuarioException;
 import br.com.alura.leilao.exception.UsuarioJaDeuCincoLancesException;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.junit.Assert.*;
 
 public class LeilaoTest {
@@ -29,7 +35,10 @@ public class LeilaoTest {
         String descricaoDevolvida = console.getDescricao();
 
         // testar resultado esperado
-        assertEquals("Console", descricaoDevolvida);
+        //assertEquals("Console", descricaoDevolvida);
+        assertThat(descricaoDevolvida, equalTo("Console"));
+        assertThat(descricaoDevolvida, is("Console"));
+        assertThat(descricaoDevolvida, is(equalTo("Console")));
     }
 
     // padronização dos nomes
@@ -45,7 +54,9 @@ public class LeilaoTest {
         CONSOLE.propoe(new Lance(ALEX, 200.0));
 
         double maiorLanceDevolvido = CONSOLE.getMaiorLance();
-        assertEquals(200.0, maiorLanceDevolvido, DELTA);
+//        assertEquals(200.0, maiorLanceDevolvido, DELTA);
+        assertThat(maiorLanceDevolvido, equalTo(200.0));
+        assertThat(4.1 + 5.3, closeTo(4.4 + 5.0, DELTA));
     }
 
     @Test
@@ -83,10 +94,18 @@ public class LeilaoTest {
 
         List<Lance> tresMaioresLancesDevolvidos = CONSOLE.tresMaioresLances();
 
-        assertEquals(3, tresMaioresLancesDevolvidos.size());
-        assertEquals(400.0, tresMaioresLancesDevolvidos.get(0).getValor(), DELTA);
-        assertEquals(300.0, tresMaioresLancesDevolvidos.get(1).getValor(), DELTA);
-        assertEquals(200.0, tresMaioresLancesDevolvidos.get(2).getValor(), DELTA);
+        //assertEquals(3, tresMaioresLancesDevolvidos.size());
+        assertThat(tresMaioresLancesDevolvidos, hasSize(3));
+        assertThat(tresMaioresLancesDevolvidos, hasSize(equalTo(3)));
+
+//        assertEquals(400.0, tresMaioresLancesDevolvidos.get(0).getValor(), DELTA);
+//        assertThat(tresMaioresLancesDevolvidos, hasItem(new Lance(ALEX, 400.0)));
+//        assertEquals(300.0, tresMaioresLancesDevolvidos.get(1).getValor(), DELTA);
+//        assertEquals(200.0, tresMaioresLancesDevolvidos.get(2).getValor(), DELTA);
+        assertThat(tresMaioresLancesDevolvidos, contains(
+                new Lance(ALEX, 400.0),
+                new Lance(new Usuario("Fran"), 300.0),
+                new Lance(ALEX, 200.0)));
     }
 
 
