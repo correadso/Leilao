@@ -11,13 +11,12 @@ import br.com.alura.leilao.exception.UsuarioJaDeuCincoLancesException;
 
 public class Leilao implements Serializable {
 
+    private final long id;
     private final String descricao;
     private final List<Lance> lances;
-    private double maiorLance = 0.0;
-    private double menorLance = 0.0;
-
 
     public Leilao(String descricao) {
+        this.id = 0L;
         this.descricao = descricao;
         this.lances = new ArrayList<>();
     }
@@ -25,28 +24,19 @@ public class Leilao implements Serializable {
     public void propoe(Lance lance) {
         valida(lance);
         lances.add(lance);
-        double valorLance = lance.getValor();
-        if (defineMaiorEMenorLanceParaOPrimeiroLance(valorLance)) return;
         Collections.sort(lances);
-        calculaMaiorLance(valorLance);
-    }
-
-    private boolean defineMaiorEMenorLanceParaOPrimeiroLance(double valorLance) {
-        if (lances.size() == 1) {
-            maiorLance = valorLance;
-            menorLance = valorLance;
-            return true;
-        }
-        return false;
     }
 
     private void valida(Lance lance) {
         double valorLance = lance.getValor();
-        if (lanceForMenorQueOUltimoLance(valorLance)) throw new LanceMenorQueUltimoLanceException();
-        if(temLances()) {
+        if (lanceForMenorQueOUltimoLance(valorLance))
+            throw new LanceMenorQueUltimoLanceException();
+        if (temLances()) {
             Usuario usuarioNovo = lance.getUsuario();
-            if (usuarioForOMesmoDoUltimoLance(usuarioNovo)) throw new LanceSeguidoDoMesmoUsuarioException();
-            if (usuarioDeuCincoLances(usuarioNovo)) throw new UsuarioJaDeuCincoLancesException();
+            if (usuarioForOMesmoDoUltimoLance(usuarioNovo))
+                throw new LanceSeguidoDoMesmoUsuarioException();
+            if (usuarioDeuCincoLances(usuarioNovo))
+                throw new UsuarioJaDeuCincoLancesException();
         }
     }
 
@@ -56,61 +46,56 @@ public class Leilao implements Serializable {
 
     private boolean usuarioDeuCincoLances(Usuario usuarioNovo) {
         int lancesDoUsuario = 0;
-        for (Lance l : lances) {
+        for (Lance l :
+                lances) {
             Usuario usuarioExistente = l.getUsuario();
-            if(usuarioExistente.equals(usuarioNovo))
+            if (usuarioExistente.equals(usuarioNovo)) {
                 lancesDoUsuario++;
-            if (lancesDoUsuario == 5)
-                return true;
+                if (lancesDoUsuario == 5) {
+                    return true;
+                }
+            }
         }
         return false;
     }
 
     private boolean usuarioForOMesmoDoUltimoLance(Usuario usuarioNovo) {
         Usuario ultimoUsuario = lances.get(0).getUsuario();
-        if(usuarioNovo.equals(ultimoUsuario))
-            return true;
-        return false;
+        return usuarioNovo.equals(ultimoUsuario);
     }
 
     private boolean lanceForMenorQueOUltimoLance(double valorLance) {
-        if(maiorLance > valorLance)
-            return true;
-        return false;
+        return getMaiorLance() > valorLance;
     }
 
-    private void calculaMenorLance(double valorLance) {
-        if (valorLance < menorLance) {
-            menorLance = valorLance;
+    public double getMenorLance() {
+        if (lances.isEmpty()) {
+            return 0.0;
         }
-    }
-
-    private void calculaMaiorLance(double valorLance) {
-        if (valorLance > maiorLance) {
-            maiorLance = valorLance;
-        }
+        return lances.get(lances.size() - 1).getValor();
     }
 
     public double getMaiorLance() {
-        return maiorLance;
+        if (lances.isEmpty()) {
+            return 0.0;
+        }
+        return lances.get(0).getValor();
     }
 
     public String getDescricao() {
         return descricao;
     }
 
-    public double getMenorLance() {
-        return menorLance;
-    }
-
     public List<Lance> tresMaioresLances() {
         int quantidadeMaximaLances = lances.size();
-        if (quantidadeMaximaLances > 3)
+        if (quantidadeMaximaLances > 3) {
             quantidadeMaximaLances = 3;
+        }
         return lances.subList(0, quantidadeMaximaLances);
     }
 
-    public int quantidadeDeLances() {
-        return lances.size();
+    public Long getId() {
+        return id;
     }
+
 }
