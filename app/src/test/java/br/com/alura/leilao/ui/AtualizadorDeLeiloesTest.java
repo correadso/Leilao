@@ -20,8 +20,10 @@ import br.com.alura.leilao.api.retrofit.client.RespostaListener;
 import br.com.alura.leilao.model.Leilao;
 import br.com.alura.leilao.ui.recyclerview.adapter.ListaLeilaoAdapter;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -47,11 +49,11 @@ public class AtualizadorDeLeiloesTest {
                 )));
                 return null;
             }
-        }).when(client).todos(ArgumentMatchers.any(RespostaListener.class));
+        }).when(client).todos(any(RespostaListener.class));
 
         atualizador.buscaLeiloes(adapter, client, context);
 
-        verify(client).todos(ArgumentMatchers.any(RespostaListener.class));
+        verify(client).todos(any(RespostaListener.class));
         verify(adapter).atualiza(new ArrayList<>(Arrays.asList(
                 new Leilao("Computador"),
                 new Leilao("Carro")
@@ -59,4 +61,20 @@ public class AtualizadorDeLeiloesTest {
     }
 
 
+    @Test
+    public void deve_ApresentarMensagemDeFalha_QuandoFalharABuscaDeLeiloes() {
+        AtualizadorDeLeiloes atualizador = Mockito.spy(new AtualizadorDeLeiloes());
+        doNothing().when(atualizador).mostraMensagemDeFalha(context);
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                RespostaListener<List<Leilao>> argument = invocation.getArgument(0);
+                argument.falha(anyString());
+                return null;
+            }
+        }).when(client).todos(any(RespostaListener.class));
+
+        atualizador.buscaLeiloes(adapter, client, context);
+        verify(atualizador).mostraMensagemDeFalha(context);
+    }
 }
