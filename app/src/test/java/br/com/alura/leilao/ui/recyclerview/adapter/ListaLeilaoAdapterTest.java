@@ -29,7 +29,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,15 +49,22 @@ import br.com.alura.leilao.model.Leilao;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 
+@RunWith(MockitoJUnitRunner.class) // executa antes do início do teste: MockitoAnnotations.initMocks(this);
 public class ListaLeilaoAdapterTest {
+
+    @Mock
+    Context context; // injeção de dependência utilizando anotação
+    @Spy
+    ListaLeilaoAdapter adapter = new ListaLeilaoAdapter(context);
 
     @Test
     public void deve_AtualizarListaDeLeiloes_QuandoRecebeListaDeLeiloes() {
+
         // objeto mock não executa nada da classe que estamos simulando, spy sim
-        Context context = Mockito.mock(Context.class);
-        ListaLeilaoAdapter adapter = Mockito.spy(new ListaLeilaoAdapter(context));
-        Mockito.doNothing().when(adapter).atualizaLista();
+        doNothing().when(adapter).atualizaLista();
 
         adapter.atualiza(new ArrayList<>(Arrays.asList(
                 new Leilao("Console"),
@@ -60,7 +72,7 @@ public class ListaLeilaoAdapterTest {
 
         int quantidadeLeiloesDevolvida = adapter.getItemCount();
 
-        Mockito.verify(adapter).atualizaLista();
+        verify(adapter).atualizaLista();
         assertThat(quantidadeLeiloesDevolvida, is(2));
     }
 
